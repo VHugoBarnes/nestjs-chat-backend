@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  mongo:
+    image: mongo:6
+    container_name: nestjs-chat-mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongovol:/data/db
+    environment:
+      - MONGODB_DATABASE=nest-chat-mongo
+
+  redis:
+    image: redis:7
+    container_name: nestjs-chat-redis
+    restart: always
+    ports:
+      - 6380:6379
+
+volumes:
+  mongovol:
+
+
+networks:
+  mynetwork:
+    driver: bridge
