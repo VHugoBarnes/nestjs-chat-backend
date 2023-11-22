@@ -4,6 +4,8 @@ import { AuthService } from "./auth.service";
 
 import { LoginDto, RegisterDto } from "./dto";
 import { Auth } from "./decorators/auth.decorator";
+import { GetJwt } from "./decorators/get-jwt.decorator";
+// import { Auth } from "./decorators/auth.decorator";
 
 @Controller("auth")
 export class AuthController {
@@ -16,10 +18,12 @@ export class AuthController {
     return this.authService.register(registerDto);
   }
 
-  @Get("test")
+  @Get("renew-token")
   @Auth()
-  test() {
-    return "pass";
+  async renew(
+    @GetJwt() jwt: string
+  ) {
+    return this.authService.renewToken(jwt);
   }
 
   @Post("login")

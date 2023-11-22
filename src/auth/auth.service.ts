@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { ForbiddenException, Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 
 import * as bcrypt from "bcrypt";
@@ -7,12 +7,14 @@ import { UsersService } from "src/users/users.service";
 import { LoginDto } from "./dto/login.dto";
 import { JwtPayload } from "./interfaces/jwt-payload.interface";
 import { RegisterDto } from "./dto";
+import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) { }
 
   private getJwtToken(payload: JwtPayload) {
@@ -43,5 +45,17 @@ export class AuthService {
       token: token,
       user: { name: user.name, email: user.email, username: user.username }
     };
+  }
+
+  renewToken(token: string) {
+    try {
+      const { _id } = this.jwtService.verify<JwtPayload>(token, { secret: this.configService.get("jwtSecret") });
+
+      const newToken = this.getJwtToken({ _id: _id });
+
+      return { token: newToken };
+    } catch (error) {
+      throw new ForbiddenException("[invalid-jwt]");
+    }
   }
 }
