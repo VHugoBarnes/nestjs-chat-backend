@@ -9,6 +9,7 @@ import { ChatWsModule } from "./chat-ws/chat-ws.module";
 import { CommonModule } from "./common/common.module";
 
 import { EnvConfiguration, JoiValidationSchema } from "./config/env.config";
+import { ChatMessagesModule } from './chat-messages/chat-messages.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { EnvConfiguration, JoiValidationSchema } from "./config/env.config";
     AuthModule,
     ChatModule,
     ChatWsModule,
+    ChatMessagesModule,
   ],
   controllers: [],
   providers: [],
