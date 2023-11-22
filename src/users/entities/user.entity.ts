@@ -20,6 +20,10 @@ export class User {
   @Prop()
   password: string;
 
+  @Prop()
+  @Field(() => String)
+  profilePhoto: string;
+
   @Prop({ unique: true })
   @Field(() => String)
   username: string;

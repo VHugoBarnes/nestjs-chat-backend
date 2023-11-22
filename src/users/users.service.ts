@@ -6,6 +6,7 @@ import * as bcrypt from "bcrypt";
 
 import { RegisterDto } from "../auth/dto";
 import { User } from "./entities/user.entity";
+import { UpdateUserInput } from "./dto/inputs/updateUser.input";
 
 @Injectable()
 export class UsersService {
@@ -43,6 +44,10 @@ export class UsersService {
     if (!user) throw new NotFoundException("[user-not-found]");
 
     return user;
+  }
+
+  async update(updateUserInput: UpdateUserInput): Promise<User> {
+    return await this.findById(updateUserInput._id);
   }
 
   private handleDBErrors = (error: any) => {
