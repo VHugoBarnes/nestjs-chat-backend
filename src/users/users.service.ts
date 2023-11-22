@@ -1,10 +1,10 @@
-import { Injectable, Logger } from "@nestjs/common";
+import { ForbiddenException, Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import { Model, mongo } from "mongoose";
 
 import * as bcrypt from "bcrypt";
 
-import { LoginDto, RegisterDto } from "../auth/dto";
+import { RegisterDto } from "../auth/dto";
 import { User } from "./entities/user.entity";
 
 @Injectable()
@@ -21,7 +21,7 @@ export class UsersService {
       // encrypt password
       const encryptedPwd = await bcrypt.hash(registerDto.password, 10);
 
-      const user = await this.userModel.create({ ...registerDto, password: encryptedPwd });
+      const user = await this.userModel.create({ ...registerDto, password: encryptedPwd, _id: new mongo.ObjectId() });
 
       return user;
     } catch (error) {
@@ -29,12 +29,28 @@ export class UsersService {
     }
   }
 
-  async login(loginDto: LoginDto) {
-    console.log({ loginDto });
+  async findByEmail(email: string): Promise<User> {
+    const user = await this.userModel.findOne({ email: email });
+
+    if (!user) throw new NotFoundException("[user-not-found]");
+
+    return user;
+  }
+
+  async findById(_id: string): Promise<User> {
+    const user = await this.userModel.findById(_id);
+
+    if (!user) throw new NotFoundException("[user-not-found]");
+
+    return user;
   }
 
   private handleDBErrors = (error: any) => {
-    this.logger.error(typeof error);
+    if (error.code === 11000) {
+      throw new ForbiddenException("[email-username-already-exists]");
+    }
+
+    this.logger.error(error.code);
     this.logger.error(error);
   };
 }

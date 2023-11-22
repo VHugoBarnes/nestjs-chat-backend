@@ -1,21 +1,26 @@
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
-import { Field, ObjectType } from "@nestjs/graphql";
+import { Field, ID, ObjectType } from "@nestjs/graphql";
+import { Schema as MSchema } from "mongoose";
 
 @Schema()
 @ObjectType()
 export class User {
+  @Prop({ type: MSchema.Types.ObjectId })
+  @Field(() => ID)
+  _id: string;
+
   @Prop({ required: true })
   @Field(() => String)
   name: string;
 
-  @Prop()
+  @Prop({ unique: true })
   @Field(() => String)
   email: string;
 
   @Prop()
   password: string;
 
-  @Prop()
+  @Prop({ unique: true })
   @Field(() => String)
   username: string;
 }
