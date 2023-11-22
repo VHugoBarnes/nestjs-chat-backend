@@ -3,7 +3,7 @@ import { Body, Controller, Get, Post } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 
 import { LoginDto, RegisterDto } from "./dto";
-import { Auth } from "./decorators/auth.decorator";
+import { AuthHttp } from "./decorators/auth-http.decorator";
 import { GetJwt } from "./decorators/get-jwt.decorator";
 // import { Auth } from "./decorators/auth.decorator";
 
@@ -19,7 +19,7 @@ export class AuthController {
   }
 
   @Get("renew-token")
-  @Auth()
+  @AuthHttp()
   async renew(
     @GetJwt() jwt: string
   ) {

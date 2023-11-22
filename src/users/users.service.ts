@@ -46,8 +46,10 @@ export class UsersService {
     return user;
   }
 
-  async update(updateUserInput: UpdateUserInput): Promise<User> {
-    return await this.findById(updateUserInput._id);
+  async update(_id: string, updateUserInput: UpdateUserInput): Promise<User> {
+    const updatedUser = await this.userModel.findByIdAndUpdate<User>(_id, updateUserInput, { new: true });
+
+    return updatedUser;
   }
 
   private handleDBErrors = (error: any) => {

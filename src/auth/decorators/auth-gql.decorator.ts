@@ -1,7 +1,7 @@
 import { applyDecorators, UseGuards } from "@nestjs/common";
-import { JwtAuthGuard } from "../guards/jwt-auth.guard";
+import { JwtAuthGuard } from "../guards/jwt-auth-gql.guard";
 
-export function Auth() {
+export function AuthQql() {
   return applyDecorators(
     UseGuards(JwtAuthGuard)
   );

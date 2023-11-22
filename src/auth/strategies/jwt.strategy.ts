@@ -26,6 +26,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const user = await this.usersService.findById(_id);
 
     if (!user) throw new BadRequestException("[user-not-found]");
+    delete user.password;
 
     return user;
   }

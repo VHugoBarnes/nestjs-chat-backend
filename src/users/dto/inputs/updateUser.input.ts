@@ -1,12 +1,9 @@
-import { Field, ID, InputType } from "@nestjs/graphql";
-import { IsMongoId, IsString, MinLength } from "class-validator";
+import { Field, InputType } from "@nestjs/graphql";
+
+import { IsString, MinLength } from "class-validator";
 
 @InputType()
 export class UpdateUserInput {
-  @IsMongoId()
-  @Field(() => ID)
-  _id: string;
-
   @IsString()
   @MinLength(1)
   @Field(() => String)
