@@ -21,7 +21,7 @@ export class User {
   password: string;
 
   @Prop()
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   profilePhoto: string;
 
   @Prop({ unique: true })
