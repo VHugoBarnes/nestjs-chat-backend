@@ -10,16 +10,36 @@ type User {
   username: String!
 }
 
+type Chat {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 type Query {
   user(id: String!): User!
   currentUser: User!
+  chat(id: Int!): Chat!
 }
 
 type Mutation {
   updateUser(updateUserInput: UpdateUserInput!): User!
+  createChat(createChatInput: CreateChatInput!): Chat!
+  updateChat(updateChatInput: UpdateChatInput!): Chat!
+  removeChat(id: Int!): Chat!
 }
 
 input UpdateUserInput {
   name: String!
   username: String!
+}
+
+input CreateChatInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateChatInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }
