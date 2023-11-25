@@ -7,6 +7,7 @@ import * as bcrypt from "bcrypt";
 import { RegisterDto } from "../auth/dto";
 import { User } from "./entities/user.entity";
 import { UpdateUserInput } from "./dto/inputs/updateUser.input";
+import { CloudinaryStrategy } from "src/common/file-upload/cloudinary.strategy";
 
 @Injectable()
 export class UsersService {
@@ -15,6 +16,8 @@ export class UsersService {
   constructor(
     @InjectModel(User.name)
     private readonly userModel: Model<User>,
+
+    private readonly cloudinaryStrategy: CloudinaryStrategy
   ) { }
 
   async create(registerDto: RegisterDto): Promise<User> {
@@ -50,6 +53,17 @@ export class UsersService {
     const updatedUser = await this.userModel.findByIdAndUpdate<User>(_id, updateUserInput, { new: true });
 
     return updatedUser;
+  }
+
+  async updateProfilePhoto(user: User, file: Express.Multer.File): Promise<string> {
+    //TODO: Delete previous image
+    //? Upload image to cloudinary
+    const result = await this.cloudinaryStrategy.uploadFile(file);
+    const url = result.secure_url;
+
+    await this.userModel.findByIdAndUpdate(user._id, { $set: { profilePhoto: url } });
+
+    return url;
   }
 
   private handleDBErrors = (error: any) => {
