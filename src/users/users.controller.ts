@@ -1,4 +1,4 @@
-import { Controller, InternalServerErrorException, Logger, Patch, UploadedFile, UseInterceptors } from "@nestjs/common";
+import { Controller, Logger, Patch, UploadedFile, UseInterceptors } from "@nestjs/common";
 import { CurrentUser } from "../auth/decorators/current-user.decorator";
 import { User } from "./entities/user.entity";
 import { UsersService } from "./users.service";
@@ -6,10 +6,7 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { AuthHttp } from "../auth/decorators/auth-http.decorator";
 import { fileFilter } from "../common/helpers/file-filter.helper";
 
-import { unlink } from "fs";
-import { promisify } from "util";
-
-const unlinkAsync = promisify(unlink);
+import { unlinkFile } from "../common/helpers/unlink-file.helper";
 
 @Controller("users")
 export class UsersController {
@@ -35,16 +32,11 @@ export class UsersController {
     @CurrentUser() user: User,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<object> {
-    try {
-      const url = await this.usersService.updateProfilePhoto(user, file);
+    const url = await this.usersService.updateProfilePhoto(user, file);
 
-      // Delete the file after processing
-      await unlinkAsync(file.path);
+    // Delete the file after processing
+    await unlinkFile(file.path);
 
-      return { url };
-    } catch (error) {
-      this.logger.error(error);
-      throw new InternalServerErrorException("[server-error]");
-    }
+    return { url };
   }
 }
