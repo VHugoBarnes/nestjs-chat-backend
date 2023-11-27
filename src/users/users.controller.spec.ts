@@ -43,7 +43,7 @@ describe("UsersController", () => {
           provide: UsersService,
           useValue: mockUsersService,
         }
-      ]
+      ],
     }).compile();
 
     controller = module.get<UsersController>(UsersController);
