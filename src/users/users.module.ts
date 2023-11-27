@@ -5,7 +5,7 @@ import { UsersService } from "./users.service";
 import { UsersResolver } from "./users.resolver";
 import { User, UserSchema } from "./entities/user.entity";
 import { UsersController } from "./users.controller";
-import { CloudinaryStrategy } from "src/common/file-upload/cloudinary.strategy";
+import { CloudinaryStrategy } from "../common/file-upload/cloudinary.strategy";
 import { ConfigModule } from "@nestjs/config";
 
 @Module({

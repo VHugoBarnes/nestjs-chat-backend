@@ -7,7 +7,7 @@ import * as bcrypt from "bcrypt";
 import { RegisterDto } from "../auth/dto";
 import { User } from "./entities/user.entity";
 import { UpdateUserInput } from "./dto/inputs/updateUser.input";
-import { CloudinaryStrategy } from "src/common/file-upload/cloudinary.strategy";
+import { CloudinaryStrategy } from "../common/file-upload/cloudinary.strategy";
 
 @Injectable()
 export class UsersService {

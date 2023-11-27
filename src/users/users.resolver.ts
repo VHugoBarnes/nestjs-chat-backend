@@ -2,9 +2,9 @@ import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { UsersService } from "./users.service";
 import { User } from "./entities/user.entity";
 import { UpdateUserInput } from "./dto/inputs/updateUser.input";
-import { AuthQql } from "src/auth/decorators/auth-gql.decorator";
-import { CurrentUser } from "src/auth/decorators/current-user.decorator";
-import { ContextType } from "src/common/enums/context-type.enum";
+import { AuthQql } from "../auth/decorators/auth-gql.decorator";
+import { CurrentUser } from "../auth/decorators/current-user.decorator";
+import { ContextType } from "../common/enums/context-type.enum";
 
 @Resolver(() => User)
 export class UsersResolver {
