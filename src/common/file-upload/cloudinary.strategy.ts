@@ -19,7 +19,6 @@ export class CloudinaryStrategy implements IFileUpload<UploadApiResponse> {
     try {
       delete file.buffer;
       delete file.stream;
-      this.logger.debug(JSON.stringify(file));
       const result = await cloudinary.uploader.upload(file.path, {});
 
       return result;
