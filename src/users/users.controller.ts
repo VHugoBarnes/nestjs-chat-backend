@@ -4,7 +4,7 @@ import { User } from "./entities/user.entity";
 import { UsersService } from "./users.service";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { AuthHttp } from "../auth/decorators/auth-http.decorator";
-import { fileFilter } from "../common/helpers/file-filter.helper";
+import { imageFileFilter } from "../common/helpers/image-file-filter.helper";
 
 import { unlinkFile } from "../common/helpers/unlink-file.helper";
 
@@ -23,7 +23,7 @@ export class UsersController {
       "file",
       {
         limits: { files: 8 * 1024 * 1024 },
-        fileFilter: fileFilter,
+        fileFilter: imageFileFilter,
         dest: "temp/"
       }
     ),
