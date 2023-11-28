@@ -6,6 +6,7 @@ import { User } from "./entities/user.entity";
 import { UploadApiResponse } from "cloudinary";
 import { mongo } from "mongoose";
 import { Readable } from "stream";
+import { RegisterDto } from "src/auth/dto";
 
 describe("UsersService", () => {
   let service: UsersService;
@@ -63,6 +64,8 @@ describe("UsersService", () => {
   };
   const mockUserSchema = {
     findByIdAndUpdate: jest.fn(async () => { }),
+    create: jest.fn().mockImplementation(async (user) => Promise.resolve({ ...user, _id: new mongo.ObjectId() })),
+    findOne: jest.fn().mockImplementation(async () => Promise.resolve({ ...mockUser })),
   };
 
   beforeEach(async () => {
@@ -93,5 +96,27 @@ describe("UsersService", () => {
     const serviceCall = await service.updateProfilePhoto(mockUser, mockFile);
 
     expect(serviceCall).toBe("https://res.cloudinary.com/demo/image/upload/v1571218330/cr4mxeqx5zb8rlakpfkg.jpg");
+  });
+
+  it("creates a user", async () => {
+    const dto: RegisterDto = {
+      email: "test@mail.com",
+      name: "Test User",
+      password: "test1234",
+      username: "test"
+    };
+    const serviceCall = await service.create(dto);
+
+    expect(serviceCall).toEqual({
+      _id: expect.any(mongo.ObjectId),
+      name: dto.name,
+      username: dto.username,
+      email: dto.email,
+      password: expect.any(String)
+    });
+  });
+
+  it("finds user by email", async () => {
+    expect(await service.findByEmail("test@email.com")).toStrictEqual(mockUser);
   });
 });
