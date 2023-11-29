@@ -1,9 +1,9 @@
 import { registerEnumType } from "@nestjs/graphql";
 
 export enum MessagesTypes {
-  text,
-  picture,
-  video
+  text = "text",
+  picture = "picture",
+  video = "video"
 };
 
 registerEnumType(MessagesTypes, { name: "MessagesType" });
