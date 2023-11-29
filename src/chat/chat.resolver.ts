@@ -15,7 +15,7 @@ import { ContextType } from "../common/enums/context-type.enum";
 export class ChatResolver {
   constructor(private readonly chatService: ChatService) { }
 
-  @Mutation(() => Chat)
+  @Mutation(() => Chat, { name: "createChat" })
   @AuthGql()
   async createChat(
     @Args("createChatInput") createChatInput: CreateChatInput,
@@ -43,21 +43,21 @@ export class ChatResolver {
     return this.chatService.findOne(id, user);
   }
 
-  @Mutation(() => Chat)
+  @Mutation(() => Chat, { name: "updateChat" })
   @AuthGql()
   async updateChat(
     @Args("updateChatInput") updateChatInput: UpdateChatInput,
     @CurrentUser(ContextType.graphql) user: User
   ) {
-    return this.chatService.update(updateChatInput._id, updateChatInput, user);
+    return this.chatService.update(updateChatInput.room_id, updateChatInput, user);
   }
 
-  @Mutation(() => Chat)
+  @Mutation(() => Chat, { name: "removeChat" })
   @AuthGql()
   async removeChat(
-    @Args("id", { type: () => ID }) id: string,
+    @Args("room_id", { type: () => String }) room_id: string,
     @CurrentUser(ContextType.graphql) user: User
   ) {
-    return this.chatService.remove(id, user);
+    return this.chatService.remove(room_id, user);
   }
 }

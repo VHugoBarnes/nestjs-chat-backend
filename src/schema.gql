@@ -46,7 +46,7 @@ type Mutation {
   updateUser(updateUserInput: UpdateUserInput!): User!
   createChat(createChatInput: CreateChatInput!): Chat!
   updateChat(updateChatInput: UpdateChatInput!): Chat!
-  removeChat(id: ID!): Chat!
+  removeChat(room_id: String!): Chat!
 }
 
 input UpdateUserInput {
@@ -67,5 +67,5 @@ input MemberInput {
 input UpdateChatInput {
   name: String
   members: [MemberInput!]
-  _id: ID!
+  room_id: String!
 }
