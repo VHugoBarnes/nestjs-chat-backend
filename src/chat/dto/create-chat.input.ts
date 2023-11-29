@@ -1,5 +1,5 @@
 import { InputType, Field } from "@nestjs/graphql";
-import { IsString, MinLength } from "class-validator";
+import { ArrayMinSize, IsArray, IsString, MinLength } from "class-validator";
 import { Member, memberRoles } from "../entities/chat.entity";
 
 @InputType()
@@ -19,6 +19,7 @@ export class CreateChatInput {
   name: string;
 
   @Field(() => [MemberInput])
-  @MinLength(1)
+  @IsArray()
+  @ArrayMinSize(1)
   members: Member[];
 }
