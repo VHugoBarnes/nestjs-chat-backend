@@ -20,7 +20,7 @@ export class ChatResolver {
   createChat(
     @Args("createChatInput") createChatInput: CreateChatInput,
     @CurrentUser(ContextType.graphql) user: User
-  ) {
+  ): Promise<Chat> {
     return this.chatService.create(createChatInput, user);
   }
 

@@ -69,8 +69,8 @@ dependencies:
     specifier: ^8.0.1
     version: 8.0.1
   nanoid:
-    specifier: ^5.0.3
-    version: 5.0.3
+    specifier: 3.0.0
+    version: 3.0.0
   passport:
     specifier: ^0.6.0
     version: 0.6.0
@@ -5024,10 +5024,8 @@ packages:
     resolution: {integrity: sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==}
     dev: true
 
-  /nanoid@5.0.3:
-    resolution: {integrity: sha512-I7X2b22cxA4LIHXPSqbBCEQSL+1wv8TuoefejsX4HFWyC6jc5JG7CEaxOltiKjc1M+YCS2YkrZZcj4+dytw9GA==}
-    engines: {node: ^18 || >=20}
-    hasBin: true
+  /nanoid@3.0.0:
+    resolution: {integrity: sha512-5lU+F2QpTW1JLwlXxnu2/jkpTipIuYZL3Za6TQzM16HYDzZQqlthbXYSW0H2KzZu1UQPGHDPbCl1TS3xOKfqEQ==}
     dev: false
 
   /natural-compare@1.4.0:

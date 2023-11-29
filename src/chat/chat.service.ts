@@ -1,6 +1,7 @@
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, mongo } from "mongoose";
+import { nanoid } from "nanoid";
 
 import { Chat, memberRoles } from "./entities/chat.entity";
 import { User } from "src/users/entities/user.entity";
@@ -34,14 +35,16 @@ export class ChatService {
     }
 
     // Create room_id
-    const { nanoid } = await import("nanoid");
     const roomId = nanoid();
+
+    const members = [...createChatInput.members, { _id: user._id.toString(), role: memberRoles.admin }];
+    console.log(members);
 
     // Create chat
     const chat = await this.chatModel.create({
+      name: createChatInput.name,
       _id: new mongo.ObjectId(),
-      ...createChatInput,
-      members: [...createChatInput.members, { _id: user._id, role: memberRoles.admin }],
+      members: members,
       room_id: roomId
     });
 

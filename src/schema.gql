@@ -12,7 +12,7 @@ type User {
 
 type MemberGql {
   _id: String!
-  role: memberRoles!
+  role: memberRoles
 }
 
 enum memberRoles {
