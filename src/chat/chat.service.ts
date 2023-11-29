@@ -166,7 +166,6 @@ export class ChatService {
         }
       }
     ]);
-
     if (chat.length === 0) throw new NotFoundException("[chat-not-found]");
 
     return chat[0];
@@ -174,7 +173,6 @@ export class ChatService {
 
   async isChatAdmin(user: User, room_id: string): Promise<Chat> {
     const chat = await this.findOne(room_id, user);
-    console.log(JSON.stringify(chat.members, null, 2));
 
     const userMember = chat.members.find((m) => m._id._id.toString() === user._id.toString());
 
@@ -194,13 +192,13 @@ export class ChatService {
     }
 
     // update members
-    if (updateChatInput.name) {
+    if (updateChatInput.members) {
       const oldMembers: Member[] = chat.members;
-      const ownMember: Member = oldMembers.find((m) => m._id.toString() === user._id.toString());
+      const ownMember: Member = oldMembers.find((m) => m._id._id.toString() === user._id.toString());
 
       // build new members with admin
       const newMembers: Member[] = updateChatInput.members.map((member: Member) => ({ ...member, _id: new mongo.ObjectId(member._id) }));
-      newMembers.push(ownMember); // push admin
+      newMembers.push({ ...ownMember, _id: ownMember._id._id }); // push admin
 
       await this.chatModel.findByIdAndUpdate(chat._id, { $set: { members: newMembers } });
     }
