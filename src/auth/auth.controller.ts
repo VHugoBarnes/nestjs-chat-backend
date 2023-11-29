@@ -5,9 +5,10 @@ import { AuthService } from "./auth.service";
 import { LoginDto, RegisterDto } from "./dto";
 import { AuthHttp } from "./decorators/auth-http.decorator";
 import { GetJwt } from "./decorators/get-jwt.decorator";
-// import { Auth } from "./decorators/auth.decorator";
+import { ApiTags } from "@nestjs/swagger";
 
 @Controller("auth")
+@ApiTags("Auth")
 export class AuthController {
   constructor(
     private readonly authService: AuthService

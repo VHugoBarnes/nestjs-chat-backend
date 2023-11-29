@@ -9,6 +9,7 @@ import { CloudinaryStrategy } from "../common/file-upload/cloudinary.strategy";
 import { ConfigModule } from "@nestjs/config";
 
 @Module({
+  controllers: [UsersController],
   providers: [
     UsersResolver,
     UsersService,
@@ -19,6 +20,5 @@ import { ConfigModule } from "@nestjs/config";
     ConfigModule,
   ],
   exports: [UsersService],
-  controllers: [UsersController]
 })
 export class UsersModule { }

@@ -7,8 +7,10 @@ import { AuthHttp } from "../auth/decorators/auth-http.decorator";
 import { imageFileFilter } from "../common/helpers/image-file-filter.helper";
 
 import { unlinkFile } from "../common/helpers/unlink-file.helper";
+import { ApiTags } from "@nestjs/swagger";
 
 @Controller("users")
+@ApiTags("Users")
 export class UsersController {
   private logger = new Logger("UsersController");
 
