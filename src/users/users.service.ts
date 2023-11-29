@@ -76,7 +76,7 @@ export class UsersService {
     return users;
   }
 
-  async findInBatch(ids: string[]): Promise<User[]> {
+  async findInBatch(ids: mongo.ObjectId[]): Promise<User[]> {
     const users = await this.userModel.find({ _id: { $in: ids } });
 
     return users;

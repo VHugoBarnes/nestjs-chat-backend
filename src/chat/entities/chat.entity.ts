@@ -1,6 +1,6 @@
 import { ObjectType, Field, ID, registerEnumType } from "@nestjs/graphql";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Schema as MSchema } from "mongoose";
+import { mongo } from "mongoose";
 import { User } from "src/users/entities/user.entity";
 
 export enum memberRoles {
@@ -11,15 +11,15 @@ export enum memberRoles {
 registerEnumType(memberRoles, { name: "memberRoles" });
 
 export type Member = {
-  _id: string;
+  _id: mongo.ObjectId;
   role: memberRoles
 };
 
 @ObjectType()
 export class MemberGql {
-  @Prop({ type: MSchema.Types.ObjectId, ref: "User" })
+  @Prop({ type: mongo.ObjectId, ref: "User" })
   @Field(() => User)
-  _id: MSchema.Types.ObjectId;
+  _id: mongo.ObjectId;
 
   @Prop({ type: String, enum: memberRoles })
   @Field(() => memberRoles, { nullable: true })
@@ -29,9 +29,9 @@ export class MemberGql {
 @Schema({ timestamps: true })
 @ObjectType()
 export class Chat {
-  @Prop({ type: MSchema.Types.ObjectId })
+  @Prop({ type: mongo.ObjectId })
   @Field(() => ID)
-  _id: string;
+  _id: mongo.ObjectId;
 
   @Prop({ type: String, index: true })
   @Field(() => String)
