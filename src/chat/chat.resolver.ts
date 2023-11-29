@@ -1,8 +1,7 @@
 import { Resolver, Query, Mutation, Args, ID } from "@nestjs/graphql";
 import { ChatService } from "./chat.service";
 import { Chat } from "./entities/chat.entity";
-import { CreateChatInput } from "./dto/create-chat.input";
-import { UpdateChatInput } from "./dto/update-chat.input";
+import { CreateChatInput, UpdateChatInput } from "./dto";
 
 import { AuthGql } from "../auth/decorators/auth-gql.decorator";
 import { CurrentUser } from "../auth/decorators/current-user.decorator";

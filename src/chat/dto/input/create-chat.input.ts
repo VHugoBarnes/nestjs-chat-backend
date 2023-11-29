@@ -4,7 +4,7 @@ import { Transform } from "class-transformer";
 import validator from "validator";
 import { ArrayMinSize, IsArray, IsMongoId, IsString, MinLength } from "class-validator";
 
-import { Member, memberRoles } from "../entities/chat.entity";
+import { Member, memberRoles } from "../../entities/chat.entity";
 
 @InputType()
 export class MemberInput {

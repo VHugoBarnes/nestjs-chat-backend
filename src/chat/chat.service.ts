@@ -6,8 +6,7 @@ import { nanoid } from "nanoid";
 import { Chat, Member, memberRoles } from "./entities/chat.entity";
 import { User } from "src/users/entities/user.entity";
 import { UsersService } from "src/users/users.service";
-import { CreateChatInput } from "./dto/create-chat.input";
-import { UpdateChatInput } from "./dto/update-chat.input";
+import { CreateChatInput, UpdateChatInput } from "./dto";
 import { PaginationArgs } from "src/common/dto/args/pagination.args";
 import { SearchArgs } from "src/common/dto/args/search.args";
 
