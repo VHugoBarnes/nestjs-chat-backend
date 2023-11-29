@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, ID, ResolveField, Parent } from "@nestjs/graphql";
+import { Resolver, Query, Mutation, Args, ID } from "@nestjs/graphql";
 import { ChatService } from "./chat.service";
 import { Chat } from "./entities/chat.entity";
 import { CreateChatInput } from "./dto/create-chat.input";
@@ -56,14 +56,5 @@ export class ChatResolver {
     @CurrentUser(ContextType.graphql) user: User
   ) {
     return this.chatService.remove(id, user);
-  }
-
-  @ResolveField(() => [User], { name: "members" })
-  @AuthGql()
-  async getChatMembers(
-    @Parent() chats: Chat[]
-  ): Promise<User[]> {
-    console.log(chats);
-    throw new Error("not implemented");
   }
 }

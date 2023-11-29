@@ -50,7 +50,7 @@ export class ChatService {
       room_id: roomId
     });
 
-    return chat;
+    return this.findOne(chat.room_id);
   }
 
   // find chats where user is part of
@@ -86,6 +86,7 @@ export class ChatService {
           "name": 1,
           "room_id": 1,
           "createdAt": 1,
+          "updatedAt": 1,
           "members": {
             $map: {
               input: "$members_users",
@@ -124,7 +125,7 @@ export class ChatService {
           from: "users",
           localField: "members._id",
           foreignField: "_id",
-          as: "members._id"
+          as: "members_users"
         }
       },
       {
@@ -132,9 +133,31 @@ export class ChatService {
           "_id": 1,
           "name": 1,
           "room_id": 1,
-          "members._id": 1,
-          "members.role": 1,
           "createdAt": 1,
+          "updatedAt": 1,
+          "members": {
+            $map: {
+              input: "$members_users",
+              as: "memberUser",
+              in: {
+                _id: {
+                  _id: "$$memberUser._id",
+                  name: "$$memberUser.name",
+                  username: "$$memberUser.username",
+                  email: "$$memberUser.email",
+                  profilePhoto: { $ifNull: ["$$memberUser.profilePhoto", null] }
+                },
+                role: {
+                  $arrayElemAt: [
+                    "$members.role",
+                    {
+                      $indexOfArray: ["$members_users._id", "$$memberUser._id"]
+                    }
+                  ]
+                }
+              }
+            }
+          }
         }
       }
     ]);

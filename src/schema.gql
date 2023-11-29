@@ -10,13 +10,23 @@ type User {
   username: String!
 }
 
+type MemberGql {
+  _id: User!
+  role: memberRoles
+}
+
+enum memberRoles {
+  admin
+  member
+}
+
 type Chat {
   _id: ID!
   name: String!
   room_id: String!
+  members: [MemberGql!]!
   createdAt: DateTime
   updatedAt: DateTime
-  members: [User!]!
 }
 
 """
@@ -52,11 +62,6 @@ input CreateChatInput {
 input MemberInput {
   _id: String!
   role: memberRoles!
-}
-
-enum memberRoles {
-  admin
-  member
 }
 
 input UpdateChatInput {
