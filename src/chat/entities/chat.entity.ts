@@ -18,7 +18,7 @@ export type Member = {
 @ObjectType()
 export class MemberGql {
   @Prop({ type: mongo.ObjectId, ref: "User" })
-  @Field(() => User)
+  @Field(() => User, { name: "user" })
   _id: mongo.ObjectId;
 
   @Prop({ type: String, enum: memberRoles })
