@@ -19,7 +19,6 @@ export const CurrentUser = createParamDecorator((data: ContextType = ContextType
       break;
     case ContextType.graphql:
       ctx = GqlExecutionContext.create(context);
-      console.log(ctx.getContext().req);
       user = ctx.getContext().req?.user;
       break;
     default:
