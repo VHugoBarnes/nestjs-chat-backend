@@ -10,23 +10,13 @@ type User {
   username: String!
 }
 
-type MemberGql {
-  _id: String!
-  role: memberRoles
-}
-
-enum memberRoles {
-  admin
-  member
-}
-
 type Chat {
   _id: ID!
   name: String!
   room_id: String!
-  members: [MemberGql!]!
   createdAt: DateTime
   updatedAt: DateTime
+  members: [User!]!
 }
 
 """
@@ -38,6 +28,7 @@ type Query {
   users(offset: Int = 0, limit: Int = 10, search: String = ""): [User!]!
   user(id: String!): User!
   currentUser: User!
+  chats(offset: Int = 0, limit: Int = 10, search: String = ""): [Chat!]!
   chat(id: ID!): Chat!
 }
 
@@ -61,6 +52,11 @@ input CreateChatInput {
 input MemberInput {
   _id: String!
   role: memberRoles!
+}
+
+enum memberRoles {
+  admin
+  member
 }
 
 input UpdateChatInput {

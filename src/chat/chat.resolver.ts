@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, ID } from "@nestjs/graphql";
+import { Resolver, Query, Mutation, Args, ID, ResolveField, Parent } from "@nestjs/graphql";
 import { ChatService } from "./chat.service";
 import { Chat } from "./entities/chat.entity";
 import { CreateChatInput } from "./dto/create-chat.input";
@@ -17,16 +17,16 @@ export class ChatResolver {
 
   @Mutation(() => Chat)
   @AuthGql()
-  createChat(
+  async createChat(
     @Args("createChatInput") createChatInput: CreateChatInput,
     @CurrentUser(ContextType.graphql) user: User
   ): Promise<Chat> {
     return this.chatService.create(createChatInput, user);
   }
 
-  @Query(() => [Chat], { name: "chat" })
+  @Query(() => [Chat], { name: "chats" })
   @AuthGql()
-  findAll(
+  async findAll(
     @CurrentUser(ContextType.graphql) user: User,
     @Args() paginationArgs: PaginationArgs,
     @Args() searchArgs: SearchArgs,
@@ -36,25 +36,34 @@ export class ChatResolver {
 
   @Query(() => Chat, { name: "chat" })
   @AuthGql()
-  findOne(@Args("id", { type: () => ID }) id: string) {
+  async findOne(@Args("id", { type: () => ID }) id: string) {
     return this.chatService.findOne(id);
   }
 
   @Mutation(() => Chat)
   @AuthGql()
-  updateChat(
+  async updateChat(
     @Args("updateChatInput") updateChatInput: UpdateChatInput,
-    @CurrentUser() user: User
+    @CurrentUser(ContextType.graphql) user: User
   ) {
     return this.chatService.update(updateChatInput._id, updateChatInput, user);
   }
 
   @Mutation(() => Chat)
   @AuthGql()
-  removeChat(
+  async removeChat(
     @Args("id", { type: () => ID }) id: string,
-    @CurrentUser() user: User
+    @CurrentUser(ContextType.graphql) user: User
   ) {
     return this.chatService.remove(id, user);
+  }
+
+  @ResolveField(() => [User], { name: "members" })
+  @AuthGql()
+  async getChatMembers(
+    @Parent() chats: Chat[]
+  ): Promise<User[]> {
+    console.log(chats);
+    throw new Error("not implemented");
   }
 }

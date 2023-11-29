@@ -37,8 +37,10 @@ export class ChatService {
     // Create room_id
     const roomId = nanoid();
 
-    const members = [...createChatInput.members, { _id: user._id.toString(), role: memberRoles.admin }];
-    console.log(members);
+    // Convert string _id to ObjectId string
+    const sanitizedMembers = createChatInput.members.map(member => ({ ...member, _id: new mongo.ObjectId(member._id) }));
+
+    const members = [...sanitizedMembers, { _id: user._id, role: memberRoles.admin }];
 
     // Create chat
     const chat = await this.chatModel.create({
@@ -56,9 +58,6 @@ export class ChatService {
     const chats = await this.chatModel.aggregate([
       {
         $match: {
-          $text: {
-            $search: searchArgs.search
-          },
           name: {
             $regex: searchArgs.search,
             $options: "i"
@@ -67,7 +66,7 @@ export class ChatService {
       },
       {
         $match: {
-          "members._id": user._id.toString()
+          "members._id": user._id
         }
       },
       { $sort: { _id: -1 } },
@@ -78,7 +77,7 @@ export class ChatService {
           from: "users",
           localField: "members._id",
           foreignField: "_id",
-          as: "members._id"
+          as: "members_users"
         }
       },
       {
@@ -86,9 +85,30 @@ export class ChatService {
           "_id": 1,
           "name": 1,
           "room_id": 1,
-          "members._id": 1,
-          "members.role": 1,
           "createdAt": 1,
+          "members": {
+            $map: {
+              input: "$members_users",
+              as: "memberUser",
+              in: {
+                _id: {
+                  _id: "$$memberUser._id",
+                  name: "$$memberUser.name",
+                  username: "$$memberUser.username",
+                  email: "$$memberUser.email",
+                  profilePhoto: { $ifNull: ["$$memberUser.profilePhoto", null] }
+                },
+                role: {
+                  $arrayElemAt: [
+                    "$members.role",
+                    {
+                      $indexOfArray: ["$members_users._id", "$$memberUser._id"]
+                    }
+                  ]
+                }
+              }
+            }
+          }
         }
       }
     ]);

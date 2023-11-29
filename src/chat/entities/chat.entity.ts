@@ -14,11 +14,12 @@ export type Member = {
   role: memberRoles
 };
 
-@ObjectType()
 export class MemberGql {
+  @Prop({ type: MSchema.Types.ObjectId, ref: "User" })
   @Field(() => String)
-  _id: string;
+  _id: MSchema.Types.ObjectId;
 
+  @Prop({ type: String, enum: memberRoles })
   @Field(() => memberRoles, { nullable: true })
   role: memberRoles;
 }
@@ -38,8 +39,7 @@ export class Chat {
   @Field(() => String)
   room_id: string;
 
-  @Prop({ type: [MemberGql], ref: "users" })
-  @Field(() => [MemberGql])
+  @Prop({ type: [MemberGql] })
   members: Member[];
 
   @Prop({ type: Date })
