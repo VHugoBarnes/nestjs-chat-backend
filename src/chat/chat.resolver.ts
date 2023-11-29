@@ -3,11 +3,13 @@ import { ChatService } from "./chat.service";
 import { Chat } from "./entities/chat.entity";
 import { CreateChatInput } from "./dto/create-chat.input";
 import { UpdateChatInput } from "./dto/update-chat.input";
-import { AuthGql } from "src/auth/decorators/auth-gql.decorator";
-import { CurrentUser } from "src/auth/decorators/current-user.decorator";
-import { User } from "src/users/entities/user.entity";
-import { PaginationArgs } from "src/common/dto/args/pagination.args";
-import { SearchArgs } from "src/common/dto/args/search.args";
+
+import { AuthGql } from "../auth/decorators/auth-gql.decorator";
+import { CurrentUser } from "../auth/decorators/current-user.decorator";
+import { User } from "../users/entities/user.entity";
+import { PaginationArgs } from "../common/dto/args/pagination.args";
+import { SearchArgs } from "../common/dto/args/search.args";
+import { ContextType } from "../common/enums/context-type.enum";
 
 @Resolver(() => Chat)
 export class ChatResolver {
@@ -17,7 +19,7 @@ export class ChatResolver {
   @AuthGql()
   createChat(
     @Args("createChatInput") createChatInput: CreateChatInput,
-    @CurrentUser() user: User
+    @CurrentUser(ContextType.graphql) user: User
   ) {
     return this.chatService.create(createChatInput, user);
   }
@@ -25,7 +27,7 @@ export class ChatResolver {
   @Query(() => [Chat], { name: "chat" })
   @AuthGql()
   findAll(
-    @CurrentUser() user: User,
+    @CurrentUser(ContextType.graphql) user: User,
     @Args() paginationArgs: PaginationArgs,
     @Args() searchArgs: SearchArgs,
   ) {
