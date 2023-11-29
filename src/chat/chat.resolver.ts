@@ -36,8 +36,11 @@ export class ChatResolver {
 
   @Query(() => Chat, { name: "chat" })
   @AuthGql()
-  async findOne(@Args("id", { type: () => ID }) id: string) {
-    return this.chatService.findOne(id);
+  async findOne(
+    @Args("id", { type: () => ID }) id: string,
+    @CurrentUser(ContextType.graphql) user: User
+  ) {
+    return this.chatService.findOne(id, user);
   }
 
   @Mutation(() => Chat)

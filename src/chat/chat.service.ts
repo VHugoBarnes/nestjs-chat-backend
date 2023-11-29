@@ -50,7 +50,7 @@ export class ChatService {
       room_id: roomId
     });
 
-    return this.findOne(chat.room_id);
+    return this.findOne(chat.room_id, user);
   }
 
   // find chats where user is part of
@@ -117,9 +117,14 @@ export class ChatService {
     return chats;
   }
 
-  async findOne(room_id: string): Promise<Chat> {
+  async findOne(room_id: string, user: User): Promise<Chat> {
     const chat = await this.chatModel.aggregate([
       { $match: { "room_id": room_id } },
+      {
+        $match: {
+          "members._id": user._id
+        }
+      },
       {
         $lookup: {
           from: "users",
@@ -168,7 +173,7 @@ export class ChatService {
   }
 
   async isChatAdmin(user: User, room_id: string): Promise<Chat> {
-    const chat = await this.findOne(room_id);
+    const chat = await this.findOne(room_id, user);
 
     const userMember = chat.members.find((m) => m._id.toString() === user._id.toString());
 
@@ -182,7 +187,7 @@ export class ChatService {
   async update(room_id: string, updateChatInput: UpdateChatInput, user: User): Promise<Chat> {
     const chat = await this.isChatAdmin(user, room_id);
 
-    return chat;
+    return this.findOne(chat.room_id, user);
   }
 
   async remove(room_id: string, user: User): Promise<Chat> {
