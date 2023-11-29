@@ -10,11 +10,21 @@ type User {
   username: String!
 }
 
+type MemberGql {
+  _id: String!
+  role: memberRoles!
+}
+
+enum memberRoles {
+  admin
+  member
+}
+
 type Chat {
   _id: ID!
   name: String!
   room_id: String!
-  members: [User!]!
+  members: [MemberGql!]!
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -25,6 +35,7 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Query {
+  users(offset: Int = 0, limit: Int = 10, search: String = ""): [User!]!
   user(id: String!): User!
   currentUser: User!
   chat(id: ID!): Chat!
@@ -44,11 +55,16 @@ input UpdateUserInput {
 
 input CreateChatInput {
   name: String!
-  members: [String!]!
+  members: [MemberInput!]!
+}
+
+input MemberInput {
+  _id: String!
+  role: memberRoles!
 }
 
 input UpdateChatInput {
   name: String
-  members: [String!]
+  members: [MemberInput!]
   _id: ID!
 }

@@ -5,6 +5,8 @@ import { UpdateUserInput } from "./dto/inputs/updateUser.input";
 import { AuthGql } from "../auth/decorators/auth-gql.decorator";
 import { CurrentUser } from "../auth/decorators/current-user.decorator";
 import { ContextType } from "../common/enums/context-type.enum";
+import { PaginationArgs } from "src/common/dto/args/pagination.args";
+import { SearchArgs } from "src/common/dto/args/search.args";
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -17,6 +19,14 @@ export class UsersResolver {
     @Args("updateUserInput") updateUserInput: UpdateUserInput,
   ): Promise<User> {
     return this.usersService.update(user._id, updateUserInput);
+  }
+
+  @Query(() => [User], { name: "users" })
+  async getUsers(
+    @Args() paginationArgs: PaginationArgs,
+    @Args() searchArgs: SearchArgs
+  ): Promise<User[]> {
+    return this.usersService.findAll(paginationArgs, searchArgs);
   }
 
   @Query(() => User, { name: "user" })

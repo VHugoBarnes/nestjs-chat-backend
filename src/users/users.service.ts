@@ -8,6 +8,8 @@ import { RegisterDto } from "../auth/dto";
 import { User } from "./entities/user.entity";
 import { UpdateUserInput } from "./dto/inputs/updateUser.input";
 import { CloudinaryStrategy } from "../common/file-upload/cloudinary.strategy";
+import { PaginationArgs } from "src/common/dto/args/pagination.args";
+import { SearchArgs } from "src/common/dto/args/search.args";
 
 @Injectable()
 export class UsersService {
@@ -47,6 +49,37 @@ export class UsersService {
     if (!user) throw new NotFoundException("[user-not-found]");
 
     return user;
+  }
+
+  async findAll(paginationArgs: PaginationArgs, searchArgs: SearchArgs): Promise<User[]> {
+    const users = await this.userModel.aggregate([
+      {
+        $match: {
+          name: {
+            $regex: searchArgs.search,
+            $options: "i"
+          },
+        }
+      },
+      { $limit: paginationArgs.limit },
+      { $skip: paginationArgs.offset },
+      {
+        $project: {
+          "name": 1,
+          "username": 1,
+          "email": 1,
+          "profilePhoto": 1,
+        }
+      }
+    ]);
+
+    return users;
+  }
+
+  async findInBatch(ids: string[]): Promise<User[]> {
+    const users = await this.userModel.find({ _id: { $in: ids } });
+
+    return users;
   }
 
   async update(_id: string, updateUserInput: UpdateUserInput): Promise<User> {

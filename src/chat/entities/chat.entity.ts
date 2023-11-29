@@ -1,7 +1,27 @@
-import { ObjectType, Field, ID } from "@nestjs/graphql";
+import { ObjectType, Field, ID, registerEnumType } from "@nestjs/graphql";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Schema as MSchema } from "mongoose";
-import { User } from "src/users/entities/user.entity";
+
+export enum memberRoles {
+  admin,
+  member
+};
+
+registerEnumType(memberRoles, { name: "memberRoles" });
+
+export type Member = {
+  _id: string;
+  role: memberRoles
+};
+
+@ObjectType()
+export class MemberGql {
+  @Field(() => String)
+  _id: string;
+
+  @Field(() => memberRoles)
+  role: memberRoles;
+}
 
 @Schema({ timestamps: true })
 @ObjectType()
@@ -10,17 +30,17 @@ export class Chat {
   @Field(() => ID)
   _id: string;
 
-  @Prop({ type: String })
+  @Prop({ type: String, index: true })
   @Field(() => String)
   name: string;
 
-  @Prop({ type: String })
+  @Prop({ type: String, unique: true })
   @Field(() => String)
   room_id: string;
 
   @Prop({ type: [MSchema.Types.ObjectId], ref: "users" })
-  @Field(() => [User])
-  members: string[];
+  @Field(() => [MemberGql])
+  members: Member[];
 
   @Prop({ type: Date })
   @Field(() => Date, { nullable: true })
