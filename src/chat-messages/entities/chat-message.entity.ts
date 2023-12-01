@@ -2,21 +2,22 @@ import { Field, ID, ObjectType } from "@nestjs/graphql";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { mongo } from "mongoose";
 import { MessagesTypes } from "../enums/messages.enum";
+import { ObjectId } from "src/common/types";
 
 @Schema()
 @ObjectType()
 export class ChatMessage {
   @Prop({ type: mongo.ObjectId })
   @Field(() => ID)
-  id: mongo.ObjectId;
+  id: ObjectId;
 
   @Prop({ type: mongo.ObjectId, ref: "User" })
   @Field(() => ID)
-  from: mongo.ObjectId;
+  from: ObjectId;
 
   @Prop({ type: mongo.ObjectId, ref: "Chat" })
   @Field(() => ID)
-  chatroom_id: mongo.ObjectId;
+  chatroom_id: ObjectId;
 
   @Prop({ type: Date })
   @Field(() => Date)

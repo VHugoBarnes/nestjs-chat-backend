@@ -1,16 +1,16 @@
 import { InputType, Field } from "@nestjs/graphql";
-import { mongo } from "mongoose";
 import { Transform } from "class-transformer";
 import validator from "validator";
 import { ArrayMinSize, IsArray, IsMongoId, IsString, MinLength } from "class-validator";
 
 import { Member, memberRoles } from "../../entities/chat.entity";
+import { ObjectId } from "src/common/types";
 
 @InputType()
 export class MemberInput {
   @Field(() => String)
   @IsMongoId()
-  _id: mongo.ObjectId;
+  _id: ObjectId;
 
   @Field(() => memberRoles)
   role: memberRoles;

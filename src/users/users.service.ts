@@ -10,6 +10,7 @@ import { UpdateUserInput } from "./dto/inputs/updateUser.input";
 import { CloudinaryStrategy } from "../common/file-upload/cloudinary.strategy";
 import { PaginationArgs } from "src/common/dto/args/pagination.args";
 import { SearchArgs } from "src/common/dto/args/search.args";
+import { ObjectId } from "src/common/types";
 
 @Injectable()
 export class UsersService {
@@ -76,7 +77,7 @@ export class UsersService {
     return users;
   }
 
-  async findInBatch(ids: mongo.ObjectId[]): Promise<User[]> {
+  async findInBatch(ids: ObjectId[]): Promise<User[]> {
     const users = await this.userModel.find({ _id: { $in: ids } });
 
     return users;
