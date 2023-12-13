@@ -170,7 +170,7 @@ export class ChatService {
     return chat[0];
   }
 
-  async isChatAdmin(user: User, room_id: string): Promise<Chat> {
+  async isRoomAdmin(user: User, room_id: string): Promise<Chat> {
     const chat = await this.findOne(room_id, user);
 
     const userMember = chat.members.find((m) => m._id._id.toString() === user._id.toString());
@@ -182,8 +182,18 @@ export class ChatService {
     return chat;
   }
 
+  async isRoomMember(user: User, room_id: string): Promise<Chat> {
+    const chat = await this.findOne(room_id, user);
+
+    const userMember = chat.members.find((m) => m._id._id.toString() === user._id.toString());
+
+    if (userMember === undefined) throw new ForbiddenException("[user-not-member]");
+
+    return chat;
+  };
+
   async update(room_id: string, updateChatInput: UpdateChatInput, user: User): Promise<Chat> {
-    const chat = await this.isChatAdmin(user, room_id);
+    const chat = await this.isRoomAdmin(user, room_id);
 
     // update name
     if (updateChatInput.name) {
@@ -206,7 +216,7 @@ export class ChatService {
   }
 
   async remove(room_id: string, user: User): Promise<Chat> {
-    const chat = await this.isChatAdmin(user, room_id);
+    const chat = await this.isRoomAdmin(user, room_id);
 
     await this.chatModel.findByIdAndDelete(chat._id);
 

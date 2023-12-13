@@ -1,6 +1,10 @@
-import { InputType } from "@nestjs/graphql";
+import { IsString, MinLength } from "class-validator";
 
-@InputType()
 export class NewMessageDto {
+  @IsString()
+  room_id: string;
 
+  @IsString()
+  @MinLength(1)
+  content: string;
 };

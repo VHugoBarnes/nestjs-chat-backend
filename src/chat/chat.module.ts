@@ -10,6 +10,7 @@ import { UsersModule } from "src/users/users.module";
   imports: [
     MongooseModule.forFeature([{ name: Chat.name, schema: ChatSchema }]),
     UsersModule
-  ]
+  ],
+  exports: [ChatService]
 })
 export class ChatModule { }
