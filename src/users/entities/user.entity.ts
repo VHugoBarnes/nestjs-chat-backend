@@ -27,6 +27,9 @@ export class User {
   @Prop({ unique: true })
   @Field(() => String)
   username: string;
+
+  @Field(() => Boolean)
+  isActive: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

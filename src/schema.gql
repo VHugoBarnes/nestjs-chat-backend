@@ -8,6 +8,7 @@ type User {
   email: String!
   profilePhoto: String
   username: String!
+  isActive: Boolean!
 }
 
 type MemberGql {
