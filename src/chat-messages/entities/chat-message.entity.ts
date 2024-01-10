@@ -3,16 +3,17 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { mongo } from "mongoose";
 import { MessagesTypes } from "../enums/messages.enum";
 import { ObjectId } from "src/common/types";
+import { User } from "src/users/entities/user.entity";
 
 @Schema()
 @ObjectType()
 export class ChatMessage {
   @Prop({ type: mongo.ObjectId })
   @Field(() => ID)
-  id: ObjectId;
+  _id: ObjectId;
 
   @Prop({ type: mongo.ObjectId, ref: "User" })
-  @Field(() => ID)
+  @Field(() => User)
   from: ObjectId;
 
   @Prop({ type: mongo.ObjectId, ref: "Chat" })

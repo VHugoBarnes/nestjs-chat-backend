@@ -28,12 +28,35 @@ type Chat {
   members: [MemberGql!]!
   createdAt: DateTime
   updatedAt: DateTime
+  chat_messages(messageId: String): ChatResponse!
+  last_message: ChatMessage!
 }
 
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type ChatMessage {
+  _id: ID!
+  from: User!
+  chatroom_id: ID!
+  at: DateTime!
+  type: MessagesType!
+  content: String!
+  url: [String!]
+}
+
+enum MessagesType {
+  text
+  picture
+  video
+}
+
+type ChatResponse {
+  has_more: Boolean!
+  messages: [ChatMessage!]!
+}
 
 type Query {
   users(offset: Int = 0, limit: Int = 10, search: String = ""): [User!]!

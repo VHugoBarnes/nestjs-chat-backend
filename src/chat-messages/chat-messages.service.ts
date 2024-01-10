@@ -42,10 +42,10 @@ export class ChatMessagesService {
 
   async getLastMessage(room_id: string, user: User): Promise<ChatMessage> {
     // Check user is member
-    await this.chatService.isRoomMember(user, room_id);
+    const chat = await this.chatService.isRoomMember(user, room_id);
 
     // Retrieve newest message
-    const lastMessage = await this.chatMessagesModel.findOne({ chatroom_id: room_id })
+    const lastMessage = await this.chatMessagesModel.findOne({ chatroom_id: chat._id })
       .sort({ at: -1 })
       .populate({
         path: "from",
