@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import mongoose, { Model } from "mongoose";
 
 import { NewMessageDto } from "./dto";
 import { ChatMessage } from "./entities/chat-message.entity";
@@ -61,7 +61,9 @@ export class ChatMessagesService {
 
     type Query = {
       chatroom_id: ObjectId,
-      _id?: ObjectId
+      _id?: {
+        $lt: ObjectId
+      }
     };
 
     const query: Query = {
@@ -69,7 +71,7 @@ export class ChatMessagesService {
     };
 
     if (lastMessageId) {
-      query._id = lastMessageId;
+      query._id = { $lt: new mongoose.Types.ObjectId(lastMessageId) };
     }
 
     const messagesAggregation = await this.chatMessagesModel.aggregate([
