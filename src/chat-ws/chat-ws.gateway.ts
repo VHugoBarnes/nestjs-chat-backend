@@ -33,8 +33,6 @@ export class ChatWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       await this.chatWsService.userCanJoinRoom(payload._id, roomId);
 
       client.join(roomId);
-
-      // this.chatWsService.userCanJoinRoom(payload._id, )
     } catch (error) {
       this.logger.error(error);
       client.disconnect();
