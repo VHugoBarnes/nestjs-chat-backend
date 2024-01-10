@@ -16,13 +16,18 @@ export class ChatWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private readonly jwtService: JwtService,
   ) { }
 
-  handleConnection(client: Socket) {
+  async handleConnection(client: Socket) {
     const token = client.handshake.headers.authentication as string;
+    const roomId = client.handshake.headers.room_id as string;
+
     let payload: JwtPayload;
 
     try {
       payload = this.jwtService.verify(token);
-      console.log({ payload, client });
+      //? Check if user belongs to chatroom
+      await this.chatWsService.userCanJoinRoom(payload._id, roomId);
+
+      // this.chatWsService.userCanJoinRoom(payload._id, )
     } catch (error) {
       this.logger.error(error);
       client.disconnect();
@@ -31,17 +36,7 @@ export class ChatWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   handleDisconnect(client: Socket) {
-    const token = client.handshake.headers.authentication as string;
-    let payload: JwtPayload;
-
-    try {
-      payload = this.jwtService.verify(token);
-      console.log({ payload, client });
-    } catch (error) {
-      this.logger.error(error);
-      client.disconnect();
-      return;
-    }
+    client.disconnect();
   }
 
   @SubscribeMessage("message-from-client")
