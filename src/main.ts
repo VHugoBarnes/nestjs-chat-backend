@@ -1,35 +1,19 @@
 import { NestFactory } from "@nestjs/core";
-import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
+import { SwaggerModule } from "@nestjs/swagger";
 import { ValidationPipe } from "@nestjs/common";
 
 import helmet from "helmet";
 
 import { AppModule } from "./app.module";
-import { corsConfig } from "./config";
+import { corsConfig, helmetConfig, swaggerDocument } from "./config";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors(corsConfig());
-  app.use(helmet({
-    crossOriginEmbedderPolicy: false,
-    contentSecurityPolicy: {
-      directives: {
-        imgSrc: ["'self'", "data:", "apollo-server-landing-page.cdn.apollographql.com"],
-        scriptSrc: ["'self'", "https: 'unsafe-inline'"],
-        manifestSrc: ["'self'", "apollo-server-landing-page.cdn.apollographql.com"],
-        frameSrc: ["'self'", "sandbox.embed.apollographql.com"],
-      },
-    },
-  }));
+  app.use(helmet(helmetConfig));
 
   //? Swagger config
-  const config = new DocumentBuilder()
-    .setTitle("Chat websockets")
-    .setDescription("Example of a chat server using RESTful APIs, GraphQL and WebSockets.")
-    .setVersion("1.0")
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup("docs", app, document);
+  SwaggerModule.setup("docs", app, swaggerDocument(app));
 
   //? Global pipes config (class-validator)
   app.useGlobalPipes(
