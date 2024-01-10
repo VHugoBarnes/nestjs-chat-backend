@@ -2,12 +2,25 @@ import { NestFactory } from "@nestjs/core";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { ValidationPipe } from "@nestjs/common";
 
+import helmet from "helmet";
+
 import { AppModule } from "./app.module";
 import { corsConfig } from "./config";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors(corsConfig());
+  app.use(helmet({
+    crossOriginEmbedderPolicy: false,
+    contentSecurityPolicy: {
+      directives: {
+        imgSrc: ["'self'", "data:", "apollo-server-landing-page.cdn.apollographql.com"],
+        scriptSrc: ["'self'", "https: 'unsafe-inline'"],
+        manifestSrc: ["'self'", "apollo-server-landing-page.cdn.apollographql.com"],
+        frameSrc: ["'self'", "sandbox.embed.apollographql.com"],
+      },
+    },
+  }));
 
   //? Swagger config
   const config = new DocumentBuilder()
