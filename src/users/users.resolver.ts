@@ -5,8 +5,8 @@ import { UpdateUserInput } from "./dto/inputs/updateUser.input";
 import { AuthGql } from "../auth/decorators/auth-gql.decorator";
 import { CurrentUser } from "../auth/decorators/current-user.decorator";
 import { ContextType } from "../common/enums/context-type.enum";
-import { PaginationArgs } from "src/common/dto/args/pagination.args";
-import { SearchArgs } from "src/common/dto/args/search.args";
+import { PaginationArgs } from "../common/dto/args/pagination.args";
+import { SearchArgs } from "../common/dto/args/search.args";
 
 @Resolver(() => User)
 export class UsersResolver {
